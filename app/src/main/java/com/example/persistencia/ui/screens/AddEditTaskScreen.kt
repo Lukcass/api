@@ -127,7 +127,6 @@ fun AddEditTaskScreen(
                 color = AppColors.Line,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
-
             TextField(
                 value = descripcion,
                 onValueChange = { descripcion = it },
