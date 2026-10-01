@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.persistencia.data.Task
+import com.example.persistencia.ui.CatalogScreen
+import com.example.persistencia.ui.community.CommunityScreen
 import com.example.persistencia.ui.components.TaskBottomNavigation
 import com.example.persistencia.ui.theme.AppColors
 import com.example.persistencia.ui.utils.DateUtils
@@ -35,16 +37,24 @@ fun TaskAppScreen(
             TaskBottomNavigation(selectedTab = selectedTab, onTabSelected = { selectedTab = it })
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onAddClick,
-                containerColor = AppColors.AccentStrong,
-                contentColor = Color.White
-            ) {
-                Icon(Icons.Filled.Add, contentDescription = "Agregar tarea")
+            // El botón "+" solo tiene sentido en las pestañas de tareas (0 a 3)
+            if (selectedTab < 4) {
+                FloatingActionButton(
+                    onClick = onAddClick,
+                    containerColor = AppColors.AccentStrong,
+                    contentColor = Color.White
+                ) {
+                    Icon(Icons.Filled.Add, contentDescription = "Agregar tarea")
+                }
             }
         }
     ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
+                .fillMaxSize()
+        ) {
             Box(modifier = if (selectedTab == 0) Modifier.fillMaxSize() else Modifier.size(0.dp)) {
                 TaskSearchScreen(
                     tasks = tasks,
@@ -90,6 +100,9 @@ fun TaskAppScreen(
                     onDeleteTask = onDeleteTask
                 )
             }
+            // Pestañas de la nube: solo se componen cuando se abren
+            if (selectedTab == 4) CatalogScreen()
+            if (selectedTab == 5) CommunityScreen()
         }
     }
 }

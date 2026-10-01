@@ -41,7 +41,7 @@ fun CatalogScreen(vm: ProductViewModel = viewModel()) {
         topBar = {
             TopAppBar(
                 title = { Text("Catálogo (nube)") },
-                actions = {
+                navigationIcon = {
                     IconButton(onClick = { vm.refresh() }, enabled = !refreshing) {
                         Icon(Icons.Filled.Refresh, contentDescription = "Actualizar")
                     }

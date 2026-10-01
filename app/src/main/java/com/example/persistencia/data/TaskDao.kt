@@ -31,4 +31,19 @@ interface TaskDao {
 
     @Query("SELECT * FROM tasks WHERE is_synced = 0")
     suspend fun getUnsyncedTasks(): List<Task>
+
+    // ---- Consultas por usuario (login) ----
+
+    @Query("SELECT * FROM tasks WHERE username = :user AND pending_delete = 0 ORDER BY fecha_creacion DESC")
+    fun observeByUser(user: String): Flow<List<Task>>
+
+    @Query("SELECT * FROM tasks WHERE username = :user")
+    suspend fun getAllByUser(user: String): List<Task>
+
+    @Query("SELECT * FROM tasks WHERE username = :user AND is_synced = 0")
+    suspend fun getUnsyncedByUser(user: String): List<Task>
+
+    // Las tareas creadas antes del login pasan a pertenecer al usuario que entra
+    @Query("UPDATE tasks SET username = :user, is_synced = 0 WHERE username = ''")
+    suspend fun adoptOrphans(user: String)
 }

@@ -1,10 +1,18 @@
 package com.example.persistencia.ui.components
 
+import androidx.compose.material.icons.outlined.Groups
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.List
@@ -23,13 +31,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.example.persistencia.ui.theme.AppColors
 
+
 private data class NavTab(val label: String, val icon: ImageVector)
 
 private val tabs = listOf(
     NavTab("Buscar", Icons.Outlined.Search),
     NavTab("Todas", Icons.AutoMirrored.Outlined.List),
     NavTab("Pendientes", Icons.Outlined.PendingActions),
-    NavTab("Completadas", Icons.Outlined.CheckCircle)
+    NavTab("Completadas", Icons.Outlined.CheckCircle),
+    NavTab("Catálogo", Icons.Outlined.ShoppingCart),
+    NavTab("Comunidad", Icons.Outlined.Groups)
 )
 
 @Composable
@@ -38,7 +49,7 @@ fun TaskBottomNavigation(
     onTabSelected: (Int) -> Unit
 ) {
     Box(
-        modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 16.dp, vertical = 10.dp)
+        modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 12.dp, vertical = 10.dp)
     ) {
         Row(
             modifier = Modifier
@@ -61,7 +72,7 @@ fun TaskBottomNavigation(
                         .clickable(interactionSource = remember { MutableInteractionSource() }, indication = null) {
                             onTabSelected(index)
                         }
-                        .padding(horizontal = 16.dp, vertical = 10.dp),
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
