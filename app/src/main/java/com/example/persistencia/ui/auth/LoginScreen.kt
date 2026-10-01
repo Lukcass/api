@@ -70,7 +70,7 @@ fun LoginScreen(vm: AuthViewModel) {
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Avatar: muestra la inicial del usuario; si aún no escribe nada, el ícono de persona
+            // bhh Avatar: muestra la inicial del usuario; si aún no escribe nada, el ícono de persona
             Box(
                 modifier = Modifier.size(52.dp).clip(CircleShape).background(AppColors.AccentSoft),
                 contentAlignment = Alignment.Center
