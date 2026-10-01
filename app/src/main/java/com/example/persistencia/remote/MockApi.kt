@@ -11,11 +11,14 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
 
-/** Cliente REST de MockAPI (usuarios y tareas). Todo corre en Dispatchers.IO. */
+/** Cliente REST de MockAPI (usuarios, tareas y catálogo). Todo corre en Dispatchers.IO. */
 object MockApi {
 
-
+    // Cuenta 1: recursos "users" y "tasks"
     const val BASE_URL = "https://6abdb448c4d5ac54830105d1.mockapi.io/api/v1"
+
+    // Cuenta 2: recurso "plantillas" (catálogo). El plan gratis solo permite 2 recursos por proyecto.
+    const val CATALOG_BASE_URL = "https://6abdbe53c4d5ac5483010b07.mockapi.io/api/v1"
 
     data class RemoteTask(
         val remoteId: String,
@@ -25,13 +28,6 @@ object MockApi {
         val fechaCreacion: Long
     )
 
-    data class CommunityTask(
-        val remoteId: String,
-        val username: String,
-        val titulo: String,
-        val estadoCompletado: Boolean,
-        val fechaCreacion: Long
-    )
 
     // ---------- Usuarios ----------
 
@@ -67,25 +63,13 @@ object MockApi {
             }
     }
 
-    /** Últimas 50 tareas de TODOS los usuarios (solo lectura). No incluye la descripción. */
-    suspend fun fetchCommunityTasks(): List<CommunityTask> {
-        val body = call("GET", "/tasks?sortBy=fechaCreacion&order=desc&page=1&limit=50")
-            ?: return emptyList()
-        val arr = JSONArray(body)
-        return (0 until arr.length()).map { arr.getJSONObject(it) }.map {
-            CommunityTask(
-                remoteId = it.getString("id"),
-                username = it.optString("username", ""),
-                titulo = it.optString("titulo", ""),
-                estadoCompletado = it.optBoolean("estadoCompletado", false),
-                fechaCreacion = it.optLong("fechaCreacion", 0L)
-            )
-        }
-    }
 
-    /** Catálogo de plantillas de tareas (solo lectura). */
+    // ---------- Catálogo (otra cuenta de MockAPI) ----------
+
+    /** Catálogo de plantillas de tareas (solo lectura). Vive en la cuenta 2 de MockAPI. */
     suspend fun fetchPlantillas(): List<Plantilla> {
-        val body = call("GET", "/plantillas?page=1&limit=50") ?: return emptyList()
+        val body = call("GET", "/plantillas?page=1&limit=50", base = CATALOG_BASE_URL)
+            ?: throw IOException("404: no existe $CATALOG_BASE_URL/plantillas")
         val arr = JSONArray(body)
         val now = System.currentTimeMillis()
         return (0 until arr.length()).map { arr.getJSONObject(it) }.map {
@@ -98,6 +82,8 @@ object MockApi {
             )
         }
     }
+
+    // ---------- Escritura de tareas ----------
 
     /** @return el id asignado por MockAPI */
     suspend fun createTask(t: Task): String {
@@ -124,10 +110,18 @@ object MockApi {
 
     private fun enc(s: String) = URLEncoder.encode(s, "UTF-8")
 
-    /** Devuelve el cuerpo de la respuesta, o null si es 404. Lanza IOException en otros errores. */
-    private suspend fun call(method: String, path: String, json: JSONObject? = null): String? =
+    /**
+     * Devuelve el cuerpo de la respuesta, o null si es 404. Lanza IOException en otros errores.
+     * [base] permite apuntar a otra cuenta de MockAPI (por defecto, la de usuarios y tareas).
+     */
+    private suspend fun call(
+        method: String,
+        path: String,
+        json: JSONObject? = null,
+        base: String = BASE_URL
+    ): String? =
         withContext(Dispatchers.IO) {
-            val conn = URL(BASE_URL + path).openConnection() as HttpURLConnection
+            val conn = URL(base + path).openConnection() as HttpURLConnection
             try {
                 conn.requestMethod = method
                 conn.connectTimeout = 8_000

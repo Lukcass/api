@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.persistencia.data.Task
 import com.example.persistencia.ui.CatalogScreen
-import com.example.persistencia.ui.community.CommunityScreen
 import com.example.persistencia.ui.components.TaskBottomNavigation
 import com.example.persistencia.ui.theme.AppColors
 import com.example.persistencia.ui.utils.DateUtils
@@ -103,7 +102,6 @@ fun TaskAppScreen(
             }
             // Pestañas de la nube: solo se componen cuando se abren
             if (selectedTab == 4) CatalogScreen(onAddToTasks = onAddTemplate)
-            if (selectedTab == 5) CommunityScreen()
         }
     }
 }

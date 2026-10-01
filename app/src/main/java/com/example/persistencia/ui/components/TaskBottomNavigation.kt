@@ -1,7 +1,5 @@
 package com.example.persistencia.ui.components
 
-import androidx.compose.material.icons.outlined.Groups
-import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,6 +17,7 @@ import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.PendingActions
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,8 +38,7 @@ private val tabs = listOf(
     NavTab("Todas", Icons.AutoMirrored.Outlined.List),
     NavTab("Pendientes", Icons.Outlined.PendingActions),
     NavTab("Completadas", Icons.Outlined.CheckCircle),
-    NavTab("Catálogo", Icons.Outlined.ShoppingCart),
-    NavTab("Comunidad", Icons.Outlined.Groups)
+    NavTab("Catálogo", Icons.Outlined.ShoppingCart)
 )
 
 @Composable

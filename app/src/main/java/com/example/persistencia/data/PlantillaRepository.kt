@@ -14,13 +14,11 @@ class PlantillaRepository(private val db: CatalogDatabase) {
 
     suspend fun refresh() {
         val remote = MockApi.fetchPlantillas()
+        // Respuesta vacía (por ejemplo un 404 por URL mal escrita): se conserva la caché local
+        if (remote.isEmpty()) return
         db.withTransaction {
-            if (remote.isEmpty()) {
-                dao.clear()
-            } else {
-                dao.upsertAll(remote)
-                dao.deleteNotIn(remote.map { it.id })
-            }
+            dao.upsertAll(remote)
+            dao.deleteNotIn(remote.map { it.id })
         }
     }
 }
