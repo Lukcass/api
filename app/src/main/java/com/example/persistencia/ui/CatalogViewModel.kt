@@ -44,15 +44,10 @@ class CatalogViewModel(application: Application) : AndroidViewModel(application)
                 _error.value = null
             } catch (e: CancellationException) {
                 throw e
-            }
-            catch (e: Exception) {
-                _error.value = "No se pudo actualizar (${e.message ?: "sin conexión"}). Mostrando datos guardados."
             } catch (e: Exception) {
                 android.util.Log.e("Catalog", "refresh falló", e)
                 _error.value = "No se pudo actualizar (${e.message ?: e.javaClass.simpleName}). Mostrando datos guardados."
-            }
-
-            finally {
+            } finally {
                 _isRefreshing.value = false
             }
         }

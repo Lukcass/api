@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -66,13 +67,24 @@ fun LoginScreen(vm: AuthViewModel) {
                 .background(AppColors.Paper)
                 .border(1.dp, AppColors.Line, cardShape)
                 .verticalScroll(rememberScrollState())
-                .padding(24.dp)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Avatar: muestra la inicial del usuario; si aún no escribe nada, el ícono de persona
             Box(
                 modifier = Modifier.size(52.dp).clip(CircleShape).background(AppColors.AccentSoft),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(Icons.Outlined.Person, contentDescription = null, tint = AppColors.Accent)
+                if (s.username.isNotEmpty()) {
+                    Text(
+                        text = s.username.first().uppercaseChar().toString(),
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = AppColors.AccentStrong
+                    )
+                } else {
+                    Icon(Icons.Outlined.Person, contentDescription = null, tint = AppColors.Accent)
+                }
             }
 
             Spacer(Modifier.height(16.dp))
@@ -80,13 +92,17 @@ fun LoginScreen(vm: AuthViewModel) {
                 text = if (isLogin) "Entra con tu usuario" else "Crea tu usuario",
                 fontFamily = FontFamily.Serif,
                 fontSize = 26.sp,
-                color = AppColors.Ink
+                color = AppColors.Ink,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(Modifier.height(6.dp))
             Text(
                 text = "Tus tareas se guardan con este nombre y vuelven si reinstalas la app.",
                 fontSize = 13.sp,
-                color = AppColors.InkSoft
+                color = AppColors.InkSoft,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(Modifier.height(20.dp))
@@ -102,7 +118,14 @@ fun LoginScreen(vm: AuthViewModel) {
             }
 
             Spacer(Modifier.height(20.dp))
-            Text("Nombre de usuario", fontSize = 13.sp, color = AppColors.Ink, fontWeight = FontWeight.Medium)
+            Text(
+                "Nombre de usuario",
+                fontSize = 13.sp,
+                color = AppColors.Ink,
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
             Spacer(Modifier.height(8.dp))
             OutlinedTextField(
                 value = s.username,
@@ -129,12 +152,20 @@ fun LoginScreen(vm: AuthViewModel) {
                 text = if (isLogin) "El mismo nombre con el que creaste tu usuario."
                 else "Elige un nombre único: 3 a 20 caracteres (letras, números, _ y .).",
                 fontSize = 12.sp,
-                color = AppColors.InkSoft
+                color = AppColors.InkSoft,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
 
             s.error?.let {
                 Spacer(Modifier.height(10.dp))
-                Text(it, fontSize = 13.sp, color = AppColors.Danger)
+                Text(
+                    it,
+                    fontSize = 13.sp,
+                    color = AppColors.Danger,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
 
             Spacer(Modifier.height(20.dp))
