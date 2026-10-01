@@ -91,7 +91,8 @@ fun TaskNavHost(username: String, onLogout: () -> Unit) {
                     onDeleteTask = { taskViewModel.deleteTask(it) },
                     onAddClick = { navController.navigate(Routes.ADD) },
                     onEditTask = { navController.navigate(Routes.edit(it.id)) },
-                    onViewTask = { navController.navigate(Routes.view(it.id)) }
+                    onViewTask = { navController.navigate(Routes.view(it.id)) },
+                    onAddTemplate = { titulo, desc -> taskViewModel.addTask(titulo, desc) }
                 )
                 UserBadge(
                     username = username,

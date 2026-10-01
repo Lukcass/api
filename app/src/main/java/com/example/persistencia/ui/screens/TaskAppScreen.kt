@@ -23,7 +23,8 @@ fun TaskAppScreen(
     onDeleteTask: (Task) -> Unit,
     onAddClick: () -> Unit,
     onEditTask: (Task) -> Unit,
-    onViewTask: (Task) -> Unit
+    onViewTask: (Task) -> Unit,
+    onAddTemplate: (String, String) -> Unit
 ) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     val (todayYear, todayMonth, todayDay) = remember { DateUtils.currentYearMonthDay() }
@@ -101,7 +102,7 @@ fun TaskAppScreen(
                 )
             }
             // Pestañas de la nube: solo se componen cuando se abren
-            if (selectedTab == 4) CatalogScreen()
+            if (selectedTab == 4) CatalogScreen(onAddToTasks = onAddTemplate)
             if (selectedTab == 5) CommunityScreen()
         }
     }

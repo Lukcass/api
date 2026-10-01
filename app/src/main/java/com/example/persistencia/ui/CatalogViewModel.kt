@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.persistencia.data.CatalogDatabase
-import com.example.persistencia.data.Product
-import com.example.persistencia.data.ProductRepository
+import com.example.persistencia.data.Plantilla
+import com.example.persistencia.data.PlantillaRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,12 +14,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class ProductViewModel(application: Application) : AndroidViewModel(application) {
+class CatalogViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = ProductRepository(CatalogDatabase.getDatabase(application))
+    private val repository = PlantillaRepository(CatalogDatabase.getDatabase(application))
 
-    // Datos cacheados: Room los emite de inmediato, sin esperar a la red.
-    val products: StateFlow<List<Product>> = repository.products
+    // Lo cacheado se emite de inmediato, sin esperar a la red
+    val plantillas: StateFlow<List<Plantilla>> = repository.plantillas
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val lastSync: StateFlow<Long?> = repository.lastSync

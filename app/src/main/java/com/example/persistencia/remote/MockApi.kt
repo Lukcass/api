@@ -1,5 +1,6 @@
 package com.example.persistencia.remote
 
+import com.example.persistencia.data.Plantilla
 import com.example.persistencia.data.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -13,7 +14,7 @@ import java.net.URLEncoder
 /** Cliente REST de MockAPI (usuarios y tareas). Todo corre en Dispatchers.IO. */
 object MockApi {
 
-    // TODO: pega tu URL base de MockAPI, sin "/" al final
+
     const val BASE_URL = "https://6abdb448c4d5ac54830105d1.mockapi.io/api/v1"
 
     data class RemoteTask(
@@ -78,6 +79,22 @@ object MockApi {
                 titulo = it.optString("titulo", ""),
                 estadoCompletado = it.optBoolean("estadoCompletado", false),
                 fechaCreacion = it.optLong("fechaCreacion", 0L)
+            )
+        }
+    }
+
+    /** Catálogo de plantillas de tareas (solo lectura). */
+    suspend fun fetchPlantillas(): List<Plantilla> {
+        val body = call("GET", "/plantillas?page=1&limit=50") ?: return emptyList()
+        val arr = JSONArray(body)
+        val now = System.currentTimeMillis()
+        return (0 until arr.length()).map { arr.getJSONObject(it) }.map {
+            Plantilla(
+                id = it.getInt("id"),
+                titulo = it.optString("titulo", ""),
+                descripcion = it.optString("descripcion", ""),
+                categoria = it.optString("categoria", "General"),
+                lastUpdated = now
             )
         }
     }
